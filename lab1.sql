@@ -1,9 +1,9 @@
+USE sakila;
+SELECT * FROM film, actor, customer;
+SELECT title FROM film;
+SELECT DISTINCT name AS language FROM film 
+	JOIN language ON film.language_id = language.language_id;
 
-SELECT * FROM sakila.film, sakila.actor, sakila.customer;
-SELECT title FROM sakila.film;
-SELECT DISTINCT name AS language FROM sakila.film 
-	JOIN sakila.language ON film.language_id = language.language_id;
-
-SELECT COUNT(*) FROM sakila.store;
-SELECT COUNT(*) FROM sakila.staff;
-SELECT first_name FROM sakila.staff;
+SELECT COUNT(*) FROM store;
+SELECT COUNT(*) FROM staff;
+SELECT first_name FROM staff;
