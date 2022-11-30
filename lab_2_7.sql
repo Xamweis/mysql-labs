@@ -7,9 +7,13 @@ JOIN film ON film.film_id = film_category.film_id
 GROUP BY category.name;
 
 -- 2) total of each staff in aug 05
-SELECT staff.first_name, staff.last_name, COUNT(*) OVER (PARTITION BY staff.staff_id) AS count
+SELECT DISTINCT staff.first_name, staff.last_name, COUNT(*) OVER (PARTITION BY staff.staff_id) AS count
 FROM staff JOIN rental ON rental.staff_id = staff.staff_id
 WHERE CONVERT(rental_date, DATE) > CONVERT('2005-07-31', DATE) AND CONVERT(rental_date, DATE) < CONVERT('2005-09-01', DATE);
+-- same as
+SELECT DISTINCT staff.first_name, staff.last_name, COUNT(*) OVER (PARTITION BY staff.staff_id) AS count
+FROM staff JOIN rental ON rental.staff_id = staff.staff_id
+WHERE DATE_FORMAT(CONVERT(rental_date, DATE), '%Y %M') = '2005 August';
 
 -- 3) actor that appered in most films
 SELECT actor.first_name, actor.last_name, COUNT(*) AS count
