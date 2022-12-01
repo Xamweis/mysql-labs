@@ -50,7 +50,7 @@ FROM film f
 JOIN inventory i USING (film_id)
 JOIN store s USING (store_id)
 WHERE title LIKE 'ACADEMY DINOSAUR'
-AND store_id = 1
+AND store_id = 2
 GROUP BY title) AS instore
 LEFT JOIN
 (SELECT f.title, COUNT(*) AS rented
@@ -59,7 +59,7 @@ LEFT JOIN inventory i USING (film_id)
 JOIN store s USING (store_id)
 JOIN rental r USING (inventory_id)
 WHERE title LIKE 'ACADEMY DINOSAUR'
-AND store_id = 1
+AND store_id = 2
 AND return_date IS NULL
 GROUP BY title) AS renting
 ON instore.title = renting.title;
@@ -70,7 +70,7 @@ RIGHT JOIN inventory USING (film_id)
 LEFT JOIN store s USING (store_id)
 LEFT JOIN rental r USING (inventory_id)
 WHERE title LIKE 'ACADEMY DINOSAUR'
-AND store_id = 1
+AND store_id = 2
 GROUP BY inventory_id;
 
 -- 7) pairs of actors that worked together
@@ -97,12 +97,30 @@ SELECT CONCAT(a1.first_name, ' ', a1.last_name) AS actor1,
 CONCAT(a2.first_name, ' ', a2.last_name) AS actor2,
 COUNT(*) AS how_often
 FROM film_actor f1 
-JOIN actor a1 
-ON f1.actor_id = a1.actor_id
 JOIN film_actor f2
 ON (f1.film_id = f2.film_id) AND (f1.actor_id < f2.actor_id)
+JOIN actor a1 
+ON f1.actor_id = a1.actor_id
 JOIN actor a2
 ON f2.actor_id = a2.actor_id
 GROUP BY f1.actor_id, f2.actor_id;
 
--- 8) kind of like 7 but without distinct -> count duplicates
+-- 8) maybe weekend
+-- DONT RUN THIS
+SELECT f1.title, c1.customer_id, c2.customer_id
+FROM rental r1 
+JOIN customer c1 
+ON r1.customer_id = c1.customer_id
+JOIN rental r2
+ON (r1.rental_id = r2.rental_id) AND (r1.customer_id < r2.customer_id)
+JOIN customer c2
+ON r2.customer_id = c2.customer_id
+JOIN inventory i1
+ON i1.inventory_id = r1.inventory_id
+JOIN inventory i2
+ON i2.inventory_id = r2.inventory_id
+JOIN film f1
+ON f1.film_id = i1.film_id
+JOIN film f2
+ON f2.film_id = i2.film_id;
+GROUP BY r1.customer_id, r2.customer_id;
