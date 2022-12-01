@@ -62,11 +62,17 @@ SELECT DISTINCT f.title, COUNT(*) OVER (PARTITION BY f.title) AS count
 FROM film f, film_actor fa
 WHERE fa.film_id = f.film_id;
 
--- 7) total paid by each customer ordered by last name.
+-- 7) total paid by each customer ordered by last name
 SELECT DISTINCT customer.first_name, customer.last_name, 
 SUM(payment.amount) OVER (PARTITION BY customer.first_name) AS sum
 FROM customer JOIN payment ON payment.customer_id = customer.customer_id
 ORDER BY customer.last_name;
+-- same as
+SELECT DISTINCT customer.first_name, customer.last_name, SUM(payment.amount) AS sum
+FROM customer JOIN payment ON payment.customer_id = customer.customer_id
+GROUP BY customer.first_name, customer.last_name
+ORDER BY customer.last_name;
+
 
 -- 8) number of films per category
 -- SEE 1)

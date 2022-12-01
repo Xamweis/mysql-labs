@@ -8,6 +8,7 @@ WHERE last_name IN
 FROM actor
 GROUP BY last_name
 HAVING COUNT(*) = 1);
+
 -- same as
 SELECT *
 FROM actor
