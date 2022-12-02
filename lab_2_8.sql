@@ -103,24 +103,22 @@ JOIN actor a1
 ON f1.actor_id = a1.actor_id
 JOIN actor a2
 ON f2.actor_id = a2.actor_id
-GROUP BY f1.actor_id, f2.actor_id;
+group BY f1.actor_id, f2.actor_id;
 
 -- 8) maybe weekend
--- DONT RUN THIS
-SELECT f1.title, c1.customer_id, c2.customer_id
-FROM rental r1 
-JOIN customer c1 
-ON r1.customer_id = c1.customer_id
-JOIN rental r2
-ON (r1.rental_id = r2.rental_id) AND (r1.customer_id < r2.customer_id)
-JOIN customer c2
-ON r2.customer_id = c2.customer_id
-JOIN inventory i1
-ON i1.inventory_id = r1.inventory_id
-JOIN inventory i2
-ON i2.inventory_id = r2.inventory_id
-JOIN film f1
-ON f1.film_id = i1.film_id
-JOIN film f2
-ON f2.film_id = i2.film_id;
-GROUP BY r1.customer_id, r2.customer_id;
+CREATE VIEW film_rents AS 
+SELECT r.customer_id, CONCAT(c.first_name, ' ', c.last_name) AS name, f.film_id, f.title
+FROM rental r
+JOIN customer c 
+ON r.customer_id = c.customer_id
+JOIN inventory i
+ON i.inventory_id = r.inventory_id
+JOIN film f
+ON f.film_id = i.film_id;
+
+SELECT fr1.name AS customer1, fr2.name AS customer2, fr1.title, COUNT(*) AS times
+FROM film_rents fr1
+JOIN film_rents fr2
+ON (fr1.film_id = fr2.film_id) AND (fr1.customer_id < fr2.customer_id)
+GROUP BY fr1.customer_id, fr2.customer_id, fr1.title
+ORDER BY times DESC;

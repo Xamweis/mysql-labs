@@ -51,8 +51,10 @@ ORDER BY count DESC
 LIMIT 3;
 
 -- 5) staff first last and adress
+-- CREATE VIEW employees AS
 SELECT s.first_name, s.last_name, a.address
 FROM staff s JOIN address a ON a.address_id = s.address_id;
+-- SELECT * FROM employees;
 
 -- 6) each film and number of actors in it
 SELECT DISTINCT film.title, COUNT(*) OVER (PARTITION BY film.title) AS count
