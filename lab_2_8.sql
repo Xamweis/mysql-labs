@@ -95,7 +95,8 @@ ON f2.actor_id = a2.actor_id;
 -- names and how often (group by actor_ids not concats because apparently there are actors with same name)
 SELECT CONCAT(a1.first_name, ' ', a1.last_name) AS actor1, 
 CONCAT(a2.first_name, ' ', a2.last_name) AS actor2,
-COUNT(*) AS how_often
+GROUP_CONCAT(film.title SEPARATOR ', ') AS films,
+COUNT(*) AS count
 FROM film_actor f1 
 JOIN film_actor f2
 ON (f1.film_id = f2.film_id) AND (f1.actor_id < f2.actor_id)
@@ -103,6 +104,8 @@ JOIN actor a1
 ON f1.actor_id = a1.actor_id
 JOIN actor a2
 ON f2.actor_id = a2.actor_id
+JOIN film 
+ON f1.film_id = film.film_id
 GROUP BY f1.actor_id, f2.actor_id;
 
 -- 8) maybe weekend
