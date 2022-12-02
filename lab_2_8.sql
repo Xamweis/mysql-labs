@@ -103,11 +103,11 @@ JOIN actor a1
 ON f1.actor_id = a1.actor_id
 JOIN actor a2
 ON f2.actor_id = a2.actor_id
-group BY f1.actor_id, f2.actor_id;
+GROUP BY f1.actor_id, f2.actor_id;
 
 -- 8) maybe weekend
-CREATE VIEW film_rents AS 
-SELECT r.customer_id, CONCAT(c.first_name, ' ', c.last_name) AS name, f.film_id, f.title
+CREATE VIEW film_rents AS
+SELECT DISTINCT r.customer_id, CONCAT(c.first_name, ' ', c.last_name) AS name, f.film_id, f.title
 FROM rental r
 JOIN customer c 
 ON r.customer_id = c.customer_id
@@ -116,9 +116,12 @@ ON i.inventory_id = r.inventory_id
 JOIN film f
 ON f.film_id = i.film_id;
 
-SELECT fr1.name AS customer1, fr2.name AS customer2, fr1.title, COUNT(*) AS times
+SELECT fr1.name AS customer1, fr2.name AS customer2, 
+GROUP_CONCAT(fr1.title SEPARATOR ', ') AS films, 
+COUNT(*) AS count
 FROM film_rents fr1
 JOIN film_rents fr2
 ON (fr1.film_id = fr2.film_id) AND (fr1.customer_id < fr2.customer_id)
-GROUP BY fr1.customer_id, fr2.customer_id, fr1.title
-ORDER BY times DESC;
+GROUP BY fr1.customer_id, fr2.customer_id
+HAVING count > 2
+ORDER BY count DESC;
