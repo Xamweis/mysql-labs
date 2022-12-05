@@ -107,4 +107,3 @@ WHERE customer_id IN (
 				SELECT SUM(amount) AS sum
 				FROM payment
 				GROUP BY customer_id) AS sub));
-    
