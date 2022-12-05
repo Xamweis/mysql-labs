@@ -1,6 +1,13 @@
+-- added table first_names, last_names, keytimes
+--    names connect to actor, customer, staff
+--    keytimes connect to every table with update time and to rental/return time
+-- added connection of film_text to film using film_id
+
+
+
 CREATE TABLE `actor` (
   `actor_id` SMALLINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  `fname_id` SAMLLINT NOT NULL,
+  `fname_id` SMALLINT NOT NULL,
   `lname_id` SMALLINT NOT NULL,
   `update_id` BIGINT NOT NULL
 );
@@ -48,7 +55,7 @@ CREATE TABLE `last_names` (
 CREATE TABLE `customer` (
   `customer_id` SMALLINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `store_id` TINYINT NOT NULL,
-  `fname_id` SAMLLINT NOT NULL,
+  `fname_id` SMALLINT NOT NULL,
   `lname_id` SMALLINT NOT NULL,
   `email` VARCHAR(50) DEFAULT NULL,
   `address_id` SMALLINT NOT NULL,
@@ -126,7 +133,7 @@ CREATE TABLE `rental` (
 
 CREATE TABLE `staff` (
   `staff_id` TINYINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  `fname_id` SAMLLINT NOT NULL,
+  `fname_id` SMALLINT NOT NULL,
   `lname_id` SMALLINT NOT NULL,
   `address_id` SMALLINT NOT NULL,
   `picture` BLOB DEFAULT NULL,
